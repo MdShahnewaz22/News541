@@ -1,23 +1,38 @@
 <?php
 //db connection
 include "../lib/connection.php";
-// inser sql
-$result = NULL;
-if (isset($_POST['c_submit'])) {
-    $name = $_POST['c_name'];
-    $icon  = $_POST['c_icon'];
-    // echo $name . $icon;
-    $insert_sql = "INSERT INTO category(name,icon) VALUES('$name','$icon')";
-    if ($conn->query($insert_sql)) {
-        $result = "<h3 class='text-success'>Data Inserted Susccessfully</h3>";
-    } else {
-        die($conn->error);
-    }
+// update sql
+if(isset($_POST['c_update'])){
+    $uid = $_POST['u_id']; 
+  $name = $_POST['c_name'];
+  $icon = $_POST['c_icon'];
+  $update_sql = "UPDATE category SET name='$name',icon='$icon' WHERE id=$uid";
+
+  if($conn ->query($update_sql)){
+    header("location:category.php");
+
+  }else{
+
+    die ($conn->error);
+  }
+
 }
-//select sql
-$select_sql = "SELECT * FROM category";
-$s_sql =$conn -> query($select_sql);
-// echo $s_sql ->num_rows;
+
+
+// select sql 
+if(isset ($_GET['id'])){
+
+    $edit_id = $_GET['id'];
+    $select_sql = "SELECT * FROM category WHERE id=$edit_id";
+    $s_sql = $conn ->query($select_sql);
+
+    if($s_sql -> num_rows > 0){
+
+        while($final = $s_sql -> fetch_assoc()){
+
+     
+   
+      
 
 ?>
 
@@ -117,67 +132,24 @@ $s_sql =$conn -> query($select_sql);
                     </ol>
                     <div class="card mb-4">
                         <div class="card-body"> 
-                            <h3>Insert Category</h3>
+                            <h3>Update Category</h3>
                             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                                <div class="mb-3">
+
+                                <input value="<?php echo $final ['id'];?>" type="hidden" name="u_id">
+
+                                <div class="mb-3"> 
                                     <label for="c_name" class="form-label">Category Name</label>
-                                    <input type="text" class="form-control " id="c_name" name="c_name" required>
+                                    <input value="<?php echo $final ['name'];?>" type="text" class="form-control " id="c_name" name="c_name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="c_icon" class="form-label">Category Icon</label>
-                                    <input type="text" class="form-control " id="c_icon" name="c_icon" required>
+                                    <input value="<?php echo $final ['icon'];?>" type="text" class="form-control " id="c_icon" name="c_icon" required>
                                 </div>
                                 <div class="mb-3">
-                                    <button type="submit" class="btn btn-dark" name="c_submit">Submit</button>
+                                    <button type="submit" class="btn btn-dark" name="c_update">Update</button>
                                     <button type="reset" class="btn btn-warning">Reset</button>
                                 </div>
                             </form>
-                            <div class="result">
-                                <?php echo $result; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h3>All Category</h3>
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th>Category Name</th>
-                                        <th>Category Icon</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <!-- <tfoot>
-                                    <tr>
-                                        <th>Category Name</th>
-                                        <th>Category Icon</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </tfoot> -->
-                                <tbody>
-                                    <?php if($s_sql ->num_rows > 0){?>
-                                        <?php while($final= $s_sql -> fetch_assoc() ){?>
-                                    <tr>
-                                        <td><?php echo $final['name'];?></td>
-                                        <td><?php echo $final['icon'];?></td>
-                                        <td> 
-                                        <a href="c_update.php?id=<?php echo $final['id'];?>">Edit</a>
-                                         <a href="c_delete.php?id=<?php echo $final['id']; ?>">Delete</a>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
-
-                                    <?php } else{ ?>
-                                    <tr>
-                                    <!-- <td style="text-align: center">No data to show</td> -->
-                                        <td>No data to show</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -203,3 +175,15 @@ $s_sql =$conn -> query($select_sql);
 </body>
 
 </html>
+
+<?php
+   }
+
+ }else{
+    header("location:category.php");
+ }
+
+}else{
+    header("location:category.php");
+}
+?>

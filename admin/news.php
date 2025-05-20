@@ -3,20 +3,28 @@
 include "../lib/connection.php";
 // inser sql
 $result = NULL;
-if (isset($_POST['c_submit'])) {
-    $name = $_POST['c_name'];
-    $icon  = $_POST['c_icon'];
-    // echo $name . $icon;
-    $insert_sql = "INSERT INTO category(name,icon) VALUES('$name','$icon')";
-    if ($conn->query($insert_sql)) {
-        $result = "<h3 class='text-success'>Data Inserted Susccessfully</h3>";
+if (isset($_POST['n_submit'])) {
+    $title   = $_POST['n_title'];
+    $icon    = $_POST['n_icon'];
+    $desc    = $_POST['n_desc'];
+    $c_id    = $_POST['c_id'];
+    $pass  = md5($_POST['n_pass']);
+    $cpass   =md5($_POST['c_pass']);
+    if ($pass == $cpass) {
+        // $result = "<h3 class='text-success'>Password Matched</h3>";
+        $insert_sql = "INSERT INTO news( title, icon, description, pass, c_id) VALUES ('$title','$icon','$desc','$pass',$c_id )";
+        if ($conn->query($insert_sql)) {
+            $result = "<h3 class='text-success'>Data Inserted Successfully</h3>";
+        } else {
+            die($conn->error);
+        }
     } else {
-        die($conn->error);
+        $result = "<h3 class='text-danger'>Password Not Matched</h3>";
     }
 }
 //select sql
-$select_sql = "SELECT * FROM category";
-$s_sql =$conn -> query($select_sql);
+$select_sql = "SELECT * FROM news";
+$s_sql = $conn->query($select_sql);
 // echo $s_sql ->num_rows;
 
 ?>
@@ -77,11 +85,11 @@ $s_sql =$conn -> query($select_sql);
                         </a>
                         <div class="sb-sidenav-menu-heading">Pages</div>
 
-                        <a class="nav-link active" href="category.php">
+                        <a class="nav-link Z" href="category.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Category
                         </a>
-                        <a class="nav-link" href="news.php">
+                        <a class="nav-link active" href="news.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             News
                         </a>
@@ -110,25 +118,47 @@ $s_sql =$conn -> query($select_sql);
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Category</h1>
+                    <h1 class="mt-4">News</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="admin.php">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Category</li>
+                        <li class="breadcrumb-item active">News</li>
                     </ol>
                     <div class="card mb-4">
-                        <div class="card-body"> 
-                            <h3>Insert Category</h3>
+                        <div class="card-body">
+                            <h3>Insert News </h3>
                             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                                 <div class="mb-3">
-                                    <label for="c_name" class="form-label">Category Name</label>
-                                    <input type="text" class="form-control " id="c_name" name="c_name" required>
+                                    <label for="n_title" class="form-label">News Title</label>
+                                    <input type="text" class="form-control " id="n_title" name="n_title" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="c_icon" class="form-label">Category Icon</label>
-                                    <input type="text" class="form-control " id="c_icon" name="c_icon" required>
+                                    <label for="n_icon" class="form-label">News Icon</label>
+                                    <input type="text" class="form-control " id="n_icon" name="n_icon" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="n_desc" class="form-label">News Description</label>
+                                    <textarea name="n_desc" class="form-control " id="n_desc" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="c_id" class="form-label">Category ID</label>
+                                    <input type="number" class="form-control " id="c_id" name="c_id" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="n_pass" class="form-label">Password</label>
+                                    <input type="password" class="form-control " id="n_pass" name="n_pass" required>
                                 </div>
                                 <div class="mb-3">
-                                    <button type="submit" class="btn btn-dark" name="c_submit">Submit</button>
+                                    <label for="c_pass" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control " id="c_pass" name="c_pass" required>
+                                </div>
+
+
+
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-dark" name="n_submit">Submit</button>
                                     <button type="reset" class="btn btn-warning">Reset</button>
                                 </div>
                             </form>
@@ -139,38 +169,38 @@ $s_sql =$conn -> query($select_sql);
                     </div>
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h3>All Category</h3>
+                            <h3>News Info</h3>
                             <table id="datatablesSimple">
                                 <thead>
                                     <tr>
-                                        <th>Category ID</th>
-                                        <th>Category Name</th>
-                                        <th>Category Icon</th>
+                                        <th>News Title</th>
+                                        <th>News Icon</th>
+                                        <th>News Description</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if($s_sql ->num_rows > 0){?>
-                                        <?php while($final= $s_sql -> fetch_assoc() ){?>
-                                    <tr>
-                                        <td><?php echo $final['id'];?></td>
-                                        <td><?php echo $final['name'];?></td>
-                                        <td><?php echo $final['icon'];?></td>
-                                        <td> 
-                                        <a href="c_update.php?id=<?php echo $final['id'];?>">Edit</a>
-                                         <a href="c_delete.php?id=<?php echo $final['id']; ?>">Delete</a>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
+                                    <?php if ($s_sql->num_rows > 0) { ?>
+                                        <?php while ($final = $s_sql->fetch_assoc()) { ?>
+                                            <tr>
+                                                <td><?php echo $final['title']; ?></td>
+                                                <td><?php echo $final['icon']; ?></td>
+                                                <td><?php echo $final['description']; ?></td>
+                                                <td>
+                                                    <a href="n_update.php?id=<?php echo $final['id']; ?>">Edit</a>
+                                                    <a href="n_delete.php?id=<?php echo $final['id']; ?>">Delete</a>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
 
-                                    <?php } else{ ?>
-                                    <tr>
-                                    <!-- <td style="text-align: center">No data to show</td> -->
-                                        <td>No data to show</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                    <?php } else { ?>
+                                        <tr>
+                                            <!-- <td style="text-align: center">No data to show</td> -->
+                                            <td>No data to show</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
                                     <?php } ?>
                                 </tbody>
                             </table>

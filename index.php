@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="vendor/css/style.css">
     <link rel="stylesheet" href="vendor/css/media.css">
 
-    <title>MyNews</title>
+    <title>NEWS541</title>
   </head>
   <body class="bg-light">
 
@@ -35,7 +35,7 @@
             <div class="collapse navbar-collapse menu" id="navbarSupportedContent">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                  <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">About</a>
@@ -45,6 +45,9 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">FAQ</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Log In</a>
                 </li>
               </ul>
               
@@ -313,7 +316,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-10">
-            <p class="text-center m-0 copy">MyNews © 2022 All rights reserved.  Lorem ipsum dolor, sit amet.</p>
+            <p class="text-center m-0 copy">MyNews © 2025 All rights reserved.Md.Shahnewaz</p>
           </div>
         </div>
       </div>

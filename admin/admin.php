@@ -47,6 +47,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
+                            <a class="nav-link" href="../index.php" target="_blank">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Visit Website
+                            </a>
                             
                             <div class="sb-sidenav-menu-heading">Pages</div>
                           
@@ -54,7 +58,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Category
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="news.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 News
                             </a>
